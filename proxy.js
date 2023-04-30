@@ -113,17 +113,17 @@ DS.ready(function(){
                       body: JSON.stringify(data)
                     })
                       .then(response => {
-                        // if (!response.ok) {
-                        //   DS.msg(`Не удалось авторизоваться через ARM_Bridge: ${resp.error}`, 'red')
-                        // }
                         return response.json();
                       })
                       .then(data => {
                         if (data.error) {
-                            DS.msg(`Не удалось авторизоваться через ARM_Bridge: ${data.error}`, 'red')
+                            DS.msg(`[ARM_Bridge] Не удалось авторизоваться. ${data.error}`, 'red')
                         } else {
                             fn(data.key);
                         }
+                      })
+                      .catch(error => {
+                          DS.msg(`[ARM_Bridge] ${error}`, 'red')
                       })
 				}
 				return;
