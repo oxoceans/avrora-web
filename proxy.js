@@ -113,9 +113,6 @@ DS.ready(function(){
                       body: JSON.stringify(data)
                     })
                       .then(response => {
-                        // if (!response.ok) {
-                        //   DS.msg(`Не удалось авторизоваться через ARM_Bridge: ${resp.error}`, 'red')
-                        // }
                         return response.json();
                       })
                       .then(data => {
