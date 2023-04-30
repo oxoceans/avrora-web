@@ -3,6 +3,7 @@
 */
 (function(console_log){
 DS.ready(function(){
+    DS.msg("app.js изменен", "greed")
 	var ArmUserId = DS.util.urlParam('ArmUserId') || localStorage.student_id;
 	var ArmUserPassword = DS.util.urlParam('ArmUserPassword') || localStorage.password;
 	
@@ -447,9 +448,6 @@ DS.ready(function(){
 					start();
 				});
 			}
-			setTimeout(function(){
-				DS.alert('Ваша версия системы устарела.<br/>Пожалуйста, скачайте новую версию по ссылке в новостях');
-			}, 60000);
 		}
 	}
 	catch(e){
@@ -1208,3 +1206,4 @@ DS.ready(function(){
 	
 });
 })(console.log.bind(console));
+
