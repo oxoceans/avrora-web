@@ -1,5 +1,5 @@
 DS.ready(function(){
-    DS.msg("Методы переопределены", "green")
+    DS.msg("Методы ARM переопределены", "green")
 	// var ArmUserId = DS.util.urlParam('ArmUserId');
 	// ARMconfig.isDebugMode = ArmUserId == '' || DS.util.urlParam('isDebug');
 	// ARMconfig.userId = ArmUserId || 10;
@@ -113,6 +113,9 @@ DS.ready(function(){
                       body: JSON.stringify(data)
                     })
                       .then(response => {
+                        // if (!response.ok) {
+                        //   DS.msg(`Не удалось авторизоваться через ARM_Bridge: ${resp.error}`, 'red')
+                        // }
                         return response.json();
                       })
                       .then(data => {
