@@ -31,7 +31,7 @@ DS.ready(function(){
 		if(!txt){
 			return('');
 		}
-		return(txt.replace(/\r/g, '').replace(/ /g, ' '));
+		return(txt.replace(/\r/g, '').replace(/ /g, ' '));
 		// return(txt.replace(/<[^>]+>/g, '').replace(/[^a-zA-Zа-яА-Я0-9]/g, ''));
 		// return(txt);
 	};
@@ -1160,22 +1160,22 @@ DS.ready(function(){
 	window.UpdateNews = UpdateNews;
 	
 	var listKeyEvents = [];
-	DS.addEvent(window, 'keydown keyup', function(e){
-		var el = [
-			performance.now()
-			,e.type
-			,e.which
-			,e.shiftKey
-			,e.metaKey
-			,e.altKey
-			,e.keyCode
-			,e.key
-			,e.code
-			,e.ctrlKey
-			,e.charCode
-		];
-		listKeyEvents.push(el);
-	});
+// 	DS.addEvent(window, 'keydown keyup', function(e){
+// 		var el = [
+// 			performance.now()
+// 			,e.type
+// 			,e.which
+// 			,e.shiftKey
+// 			,e.metaKey
+// 			,e.altKey
+// 			,e.keyCode
+// 			,e.key
+// 			,e.code
+// 			,e.ctrlKey
+// 			,e.charCode
+// 		];
+// 		listKeyEvents.push(el);
+// 	});
 	
 	var isAuthorized = false;
 	setInterval(function(){
@@ -1206,4 +1206,3 @@ DS.ready(function(){
 	
 });
 })(console.log.bind(console));
-
