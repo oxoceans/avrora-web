@@ -3,7 +3,7 @@
 */
 (function(console_log){
 DS.ready(function(){
-    DS.msg("app.js изменен", "greed")
+    DS.msg("app.js изменен")
 	var ArmUserId = DS.util.urlParam('ArmUserId') || localStorage.student_id;
 	var ArmUserPassword = DS.util.urlParam('ArmUserPassword') || localStorage.password;
 	
