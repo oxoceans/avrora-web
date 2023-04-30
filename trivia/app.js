@@ -615,9 +615,6 @@ DS.ARM.authorize(data.user_id, data.password, function(d){
 					start();
 				});
 			}
-			setTimeout(function(){
-				DS.alert('Ваша версия системы устарела.<br/>Пожалуйста, скачайте новую версию по ссылке в новостях');
-			}, 60000);
 		}
 	}
 	catch(e){
