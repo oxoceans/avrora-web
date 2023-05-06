@@ -1,7 +1,7 @@
 DS.ready(function() {
     DS.page.registerTaskTool('report', function() {
         this.getTitle = function() {
-            return ('     '); // tab title
+            return ('Отчет'); // tab title
         };
         var menuGenerate;
         var menuGetDocx;
@@ -60,7 +60,7 @@ DS.ready(function() {
             });
         }
         var genReport = function() {
-            DS.progressWindow('         ...');
+            DS.progressWindow('Обработка...');
             GenReport(function(d) {
                 DS.progressWindow();
                 if (d.success) {
@@ -110,7 +110,7 @@ DS.ready(function() {
                     }
                 }
                 if (msgs.length) {
-                    DS.alert('<ul><li>' + msgs.join('</li><li>') + '</li></ul>', '                 :');
+                    DS.alert('<ul><li>' + msgs.join('</li><li>') + '</li></ul>', 'Обнаружены ошибки:');
                     return;
                 }
                 var fn = function() {
@@ -133,24 +133,24 @@ DS.ready(function() {
                             }
                         });
                     });
-                    DS.confirm('                                 <br/>                       ?<br/>                       <br/>                    .', function() {
+                    DS.confirm('Вы действительно хотите отправить<br/>это задание на проверку?<br/>Вы не сможете вернуться<br/>к его редактированию.', function() {
                         localStorage.removeItem('IMPORT');
                         localStorage.removeItem('IMPORT_ENTER');
-                        DS.progressWindow('         ...');
+                        DS.progressWindow('Обработка...');
                         DS.ARM.taskControlRun(idTask, function(d) {
                             DS.progressWindow();
                             if (d.success) {
                                 DS.page.endTask(function() {
-                                    DS.msg('          ', 'green');
+                                    DS.msg('Отправлено', 'green');
                                 }, true);
                             } else {
-                                DS.msg('                .                 ', 'red');
+                                DS.msg('Произошла ошибка. Попробуйте снова', 'red');
                             }
                         });
                     }, null, true);
                 };
                 if (msgsTool.length) {
-                    DS.confirm('             ,                                                    :<ul><li>' + msgsTool.join('</li><li>') + '</li></ul>', fn, null, true);
+                    DS.confirm('Я подтверждаю, что все ошибки в следующих разделах были исправлены:<ul><li>' + msgsTool.join('</li><li>') + '</li></ul>', fn, null, true);
                 } else {
                     fn();
                 }
@@ -162,7 +162,7 @@ DS.ready(function() {
             var div = document.createElement('div');
             div.style.cssText = 'position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);';
             var btn = document.createElement('button');
-            btn.innerHTML = '                   ';
+            btn.innerHTML = 'Сгенерировать отчет';
             btn.style.cssText = 'font-size: 2em;padding: 20px;';
             div.appendChild(btn);
             DS.addEvent(btn, 'click', function() {
@@ -182,15 +182,15 @@ DS.ready(function() {
         };
         // called after page show
         this.show = function() {
-            menuGenerate = DS.page.topMenu.addButton('                   ');
+            menuGenerate = DS.page.topMenu.addButton('Сгенерировать отчет');
             DS.addEvent(menuGenerate, 'click', function() {
                 genReport();
             });
-            menuSend = DS.page.topMenu.addButton('                     ');
+            menuSend = DS.page.topMenu.addButton('Отправить на проверку');
             DS.addEvent(menuSend, 'click', function() {
                 sendControl();
             });
-            menuGetDocx = DS.page.topMenu.addButton('          DOCX');
+            menuGetDocx = DS.page.topMenu.addButton('Загрузить DOCX');
             DS.addEvent(menuGetDocx, 'click', function() {
                 // sendControl();
                 DS.ARM.getTaskReportDocx(idTask, function(d) {
