@@ -10,14 +10,14 @@
         var showGetLink = false;
         var showImportFromBank = false;
         var showSendToServerWindow = function() {
-            text = '<h3>                                          Trivia?</h3>\n' + '<p><strong>              :</strong></p>\n' + '<ul>\n' + '<li>                                      ,                                                 ;</li>\n' + '<li>                                                                   Trivia.</li>\n' + '</ul>\n' + '<p><strong>                                  Trivia:</strong></p>\n' + '<ul>\n' + '<li>ID                       (                                                             );</li>\n' + '<li>                         :\n' + '<ul>\n' + '<li>method_description -                  "             ";</li>\n' + '<li>algo2 -                         "        ";</li>\n' + '<li>algo_text -                                               "        ";</li>\n' + '<li>graph_svg -                                "    -     ";</li>\n' + '<li>algo_graph -                                "    -     ";</li>\n' + '<li>name -                  ;</li>\n' + '</ul>\n' + '</li>\n' + '<li>            </li>\n' + '</ul>\n' + '<p><strong>                                    Trivia:</strong></p>\n' + '<ul>\n' + '<li>                </li>\n' + '<li>                                        ID;</li>\n' + '<li>                                 ;</li>\n' + '<li>            ;</li>\n' + '</ul>\n' + '<p><em><strong>                                                     Trivia,                                  </strong></em></p>\n' + '<p><strong>                                             </strong></p>\n';
+            text = '<h3>Хотите ли использовать обший банк решений Trivia?</h3>\n' + '<p><strong>Что это значит:</strong></p>\n' + '<ul>\n' + '<li>Мы предоставляем вам доступ к решениям, который были ранее отправлены другими студентами;</li>\n' + '<li>Все решения отправленные на проверку так же отправляются на сервер Trivia.</li>\n' + '</ul>\n' + '<p><strong>Как данные отправляются на сервер Trivia:</strong></p>\n' + '<ul>\n' + '<li>ID отправленного задания (используется для генерации уникального имени файла на сервере);</li>\n' + '<li>Следующие поля из решения:\n' + '<ul>\n' + '<li>method_description - текст из вкладки "Метод решения";</li>\n' + '<li>algo2 - часть данных из вкладки "Алгоритм";</li>\n' + '<li>algo_text - хранит весь набранный руками текст из вкладки "Алгоритм";</li>\n' + '<li>graph_svg - первая часть данных из вкладки "Блок-схема";</li>\n' + '<li>algo_graph - вторая часть данных из вкладки "Блок-схема";</li>\n' + '<li>name - название задания ;</li>\n' + '</ul>\n' + '</li>\n' + '<li>Исходный код</li>\n' + '</ul>\n' + '<p><strong>Какие данные сохраняются на сервере Trivia:</strong></p>\n' + '<ul>\n' + '<li>Название задания</li>\n' + '<li>Уникальное имя файла сгенерированное из ID;</li>\n' + '<li>Вышеперечисленные поля из решения;</li>\n' + '<li>Исходный код;</li>\n' + '</ul>\n' + '<p><em><strong>При желании вы можете удалить свои решения с сервера Trivia, для этого есть кнопка в настроках</strong></em></p>\n' + '<p><strong>Свой выбор всегда можно изменить в настройках</strong></p>\n';
             DS.create({
                 DStype: 'window',
                 destroyOnClose: true,
                 reqWidth: 800,
                 height: '700px',
                 items: [
-                    ['title', '                  ', '->', {
+                    ['title', 'Общий банк решений', '->', {
                         DStype: 'window-button-close'
                     }], '<div style="padding: 5px" class="ds-window-scrollable ">', text, {
                         DStype: 'form-panel',
@@ -26,11 +26,11 @@
                             items: [{
                                 DStype: 'checkbox',
                                 value: true,
-                                label: '<b>                               </b>',
+                                label: '<b>Использовать общий банк решений</b>',
                                 name: 'useSolutionBank'
                             }, '<br>', {
                                 DStype: 'button',
-                                label: '       ',
+                                label: 'Принять',
                                 listeners: {
                                     click: function() {
                                         var $form = this.getForm();
@@ -70,8 +70,8 @@
             if (!txt) {
                 return ('');
             }
-            return (txt.replace(/\r/g, '').replace(/ /g, ' '));
-            // return(txt.replace(/<[^>]+>/g, '').replace(/[^a-zA-Z -  - 0-9]/g, ''));
+            return (txt.replace(/\r/g, '').replace(/ /g, ' '));
+            // return(txt.replace(/<[^>]+>/g, '').replace(/[^a-zA-Zа-яА-Я0-9]/g, ''));
             // return(txt);
         };
         var _cbDropHtml = function(html) {
@@ -167,7 +167,7 @@
                 DS.addEvent(window, 'paste', function(e) {
                     if (!e.clipboardData) {
                         e.preventDefault();
-                        DS.msg('                 ', 'red');
+                        DS.msg('Вставка запрещена', 'red');
                         return (false);
                     }
                     // var txt = e.clipboardData.getData('text/html');
@@ -181,14 +181,14 @@
                     } */
                     if (!canPaste(txt, isHTML)) {
                         e.preventDefault();
-                        DS.msg('                 <br/>Try Ctrl+Shift+V!', 'red');
+                        DS.msg('Вставка запрещена<br/>Try Ctrl+Shift+V!', 'red');
                         return (false);
                     }
                 });
                 DS.addEvent(window, 'drop', function(e) {
                     if (!e.clipboardData) {
                         e.preventDefault();
-                        DS.msg('                 ', 'red');
+                        DS.msg('Вставка запрещена', 'red');
                         return (false);
                     }
                     // var txt = e.clipboardData.getData('text/html');
@@ -202,7 +202,7 @@
                     // }
                     if (!canPaste(txt, isHTML)) {
                         e.preventDefault();
-                        DS.msg('                 ', 'red');
+                        DS.msg('Вставка запрещена', 'red');
                         return (false);
                     }
                 });
@@ -214,7 +214,7 @@
                     return;
                 }
                 if (!canPaste(args.content, !args.plain)) {
-                    DS.msg('                 ', 'red');
+                    DS.msg('Вставка запрещена', 'red');
                     args.content = '';
                 }
                 if (args.plain) {
@@ -268,72 +268,72 @@
         function translit(word) {
             var answer = '';
             var converter = {
-                ' ': 'a',
-                ' ': 'b',
-                ' ': 'v',
-                ' ': 'g',
-                ' ': 'd',
-                ' ': 'e',
-                ' ': 'e',
-                ' ': 'zh',
-                ' ': 'z',
-                ' ': 'i',
-                ' ': 'y',
-                ' ': 'k',
-                ' ': 'l',
-                ' ': 'm',
-                ' ': 'n',
-                ' ': 'o',
-                ' ': 'p',
-                ' ': 'r',
-                ' ': 's',
-                ' ': 't',
-                ' ': 'u',
-                ' ': 'f',
-                ' ': 'h',
-                ' ': 'c',
-                ' ': 'ch',
-                ' ': 'sh',
-                ' ': 'sch',
-                ' ': '',
-                ' ': 'y',
-                ' ': '',
-                ' ': 'e',
-                ' ': 'yu',
-                ' ': 'ya',
-                ' ': 'A',
-                ' ': 'B',
-                ' ': 'V',
-                ' ': 'G',
-                ' ': 'D',
-                ' ': 'E',
-                ' ': 'E',
-                ' ': 'Zh',
-                ' ': 'Z',
-                ' ': 'I',
-                ' ': 'Y',
-                ' ': 'K',
-                ' ': 'L',
-                ' ': 'M',
-                ' ': 'N',
-                ' ': 'O',
-                ' ': 'P',
-                ' ': 'R',
-                ' ': 'S',
-                ' ': 'T',
-                ' ': 'U',
-                ' ': 'F',
-                ' ': 'H',
-                ' ': 'C',
-                ' ': 'Ch',
-                ' ': 'Sh',
-                ' ': 'Sch',
-                ' ': '',
-                ' ': 'Y',
-                ' ': '',
-                ' ': 'E',
-                ' ': 'Yu',
-                ' ': 'Ya',
+                'а': 'a',
+                'б': 'b',
+                'в': 'v',
+                'г': 'g',
+                'д': 'd',
+                'е': 'e',
+                'ё': 'e',
+                'ж': 'zh',
+                'з': 'z',
+                'и': 'i',
+                'й': 'y',
+                'к': 'k',
+                'л': 'l',
+                'м': 'm',
+                'н': 'n',
+                'о': 'o',
+                'п': 'p',
+                'р': 'r',
+                'с': 's',
+                'т': 't',
+                'у': 'u',
+                'ф': 'f',
+                'х': 'h',
+                'ц': 'c',
+                'ч': 'ch',
+                'ш': 'sh',
+                'щ': 'sch',
+                'ь': '',
+                'ы': 'y',
+                'ъ': '',
+                'э': 'e',
+                'ю': 'yu',
+                'я': 'ya',
+                'А': 'A',
+                'Б': 'B',
+                'В': 'V',
+                'Г': 'G',
+                'Д': 'D',
+                'Е': 'E',
+                'Ё': 'E',
+                'Ж': 'Zh',
+                'З': 'Z',
+                'И': 'I',
+                'Й': 'Y',
+                'К': 'K',
+                'Л': 'L',
+                'М': 'M',
+                'Н': 'N',
+                'О': 'O',
+                'П': 'P',
+                'Р': 'R',
+                'С': 'S',
+                'Т': 'T',
+                'У': 'U',
+                'Ф': 'F',
+                'Х': 'H',
+                'Ц': 'C',
+                'Ч': 'Ch',
+                'Ш': 'Sh',
+                'Щ': 'Sch',
+                'Ь': '',
+                'Ы': 'Y',
+                'Ъ': '',
+                'Э': 'E',
+                'Ю': 'Yu',
+                'Я': 'Ya',
                 '-': '_'
             };
             for (var i = 0; i < word.length; ++i) {
@@ -352,7 +352,7 @@
                         _armUserPrefs = d2.data;
                         DS.invokeEvent('arm/authorized', d);
                     } else {
-                        DS.msg('                                        ', 'red');
+                        DS.msg('Не удалось загрузить данные пользователя', 'red');
                     }
                 });
             } else {
@@ -399,13 +399,13 @@
                     destroyOnClose: true,
                     reqWidth: 300,
                     items: [
-                        ['title', '           '], {
+                        ['title', 'Авторизация'], {
                             DStype: 'form-panel',
                             items: [{
                                 DStype: 'list-layout',
                                 items: [{
                                     DStype: 'combo',
-                                    label: '        ',
+                                    label: 'Институт',
                                     name: 'institute_id',
                                     listeners: {
                                         change: function() {
@@ -414,7 +414,7 @@
                                     }
                                 }, {
                                     DStype: 'radioline',
-                                    label: '    ',
+                                    label: 'Курс',
                                     name: 'course',
                                     items: [{
                                         label: '1',
@@ -436,7 +436,7 @@
                                     }
                                 }, {
                                     DStype: 'combo',
-                                    label: '      ',
+                                    label: 'Группа',
                                     name: 'group_id',
                                     listeners: {
                                         change: function() {
@@ -451,21 +451,21 @@
                                     }
                                 }, {
                                     DStype: 'combo',
-                                    label: '   ',
+                                    label: 'ФИО',
                                     name: 'user_id',
                                     required: true
                                 }, {
                                     DStype: 'passfield',
-                                    label: '      ',
+                                    label: 'Пароль',
                                     name: 'password',
                                     required: true
                                 }, {
                                     DStype: 'checkbox',
-                                    label: '              ',
+                                    label: 'Запомнить меня',
                                     name: 'remember_me'
                                 }, {
                                     DStype: 'button',
-                                    label: '     ',
+                                    label: 'Войти',
                                     listeners: {
                                         click: function() {
                                             var $form = this.getForm();
@@ -555,7 +555,7 @@
                     });
                 }
                 /*setTimeout(function() {
-                    DS.alert('                            .<br/>          ,                                           ');
+                    DS.alert('Ваша версия системы устарела.<br/>Пожалуйста, скачайте новую версию по ссылке в новостях');
                 }, 60000);*/
             }
         } catch (e) {
@@ -634,7 +634,7 @@
                         }
                     },
                     items: [
-                        ['title', '                ', '->', isForce ? '' : {
+                        ['title', 'Изменение пароля', '->', isForce ? '' : {
                             DStype: 'window-button-close'
                         }], {
                             DStype: 'form-panel',
@@ -642,46 +642,46 @@
                                 DStype: 'list-layout',
                                 items: [{
                                     DStype: 'passfield',
-                                    label: '              ',
+                                    label: 'Текущий пароль',
                                     name: 'old_password'
                                 }, {
                                     DStype: 'passfield',
-                                    label: '            ',
+                                    label: 'Новый пароль',
                                     name: 'user_password'
                                 }, {
                                     DStype: 'passfield',
-                                    label: '                ',
+                                    label: 'Повторите пароль',
                                     name: 'pass_new2'
                                 }, {
                                     DStype: 'button',
-                                    label: '        ',
+                                    label: 'Изменить',
                                     listeners: {
                                         click: function() {
                                             var form = this.getForm();
                                             var data = form.getFields();
                                             if (!data.old_password) {
-                                                DS.msg('                      ', 'red');
+                                                DS.msg('Введите текущий пароль', 'red');
                                                 return
                                             }
                                             if (!data.user_password) {
-                                                DS.msg('                    ', 'red');
+                                                DS.msg('Введите новый пароль', 'red');
                                                 return
                                             }
                                             if (data.user_password.length < 4) {
-                                                DS.msg('                           ', 'red');
+                                                DS.msg('Новый пароль слишком слабый', 'red');
                                                 return
                                             }
                                             if (data.user_password.length > 16) {
-                                                DS.msg('                                16         ', 'red');
+                                                DS.msg('Пароль может содержать не более 16 символов', 'red');
                                                 return
                                             }
                                             if (data.user_password != data.pass_new2) {
-                                                DS.msg('                                   ', 'red');
+                                                DS.msg('Пароли и подтверждение не совпадают', 'red');
                                                 return
                                             }
                                             DS.ARM.changePassword(data.old_password, data.user_password, function(d) {
                                                 if (d.success) {
-                                                    DS.msg('                      ', 'green');
+                                                    DS.msg('Пароль успешно изменен', 'green');
                                                     form.parent().close();
                                                     delete localStorage.password;
                                                 }
@@ -697,7 +697,7 @@
             DS.create({
                 DStype: 'topmenu',
                 items: [{
-                    text: '           ',
+                    text: 'Темная тема',
                     icon: {
                         DStype: 'checkbox',
                         value: false,
@@ -717,38 +717,38 @@
                         }
                     }
                 }, '-', {
-                    text: '               ',
+                    text: 'Изменить пароль',
                     listeners: {
                         click: function() {
                             ChangePassword();
                         }
                     }
                 }, '-', {
-                    text: '                   ',
+                    text: 'Удалить авторизацию',
                     listeners: {
                         click: function() {
                             delete localStorage.student_id;
                             delete localStorage.password;
-                            DS.msg('       ', 'green');
+                            DS.msg('Удалено', 'green');
                         }
                     }
                 }]
-            }).attach(DS.page.topMenu.addButton('         '), 'click');
+            }).attach(DS.page.topMenu.addButton('Настройки'), 'click');
             DS.create({
                 DStype: 'topmenu',
                 items: [{
-                    text: '      '
+                    text: 'Помощь'
                         // ,disabled: !DS.util.urlParam('help_api')
                         ,
                     listeners: {
                         click: function() {
                             // DS.getJSON(DS.util.urlParam('help_api'));
                             // 
-                            DS.page.showPdf('/student/files/Prilozheniye_k_methodichke.pdf', '                      ');
+                            DS.page.showPdf('/student/files/Prilozheniye_k_methodichke.pdf', 'Приложение к методичке');
                         }
                     }
                 }, '-', {
-                    text: '           ',
+                    text: 'О программе',
                     listeners: {
                         click: function() {
                             DS.create({
@@ -756,22 +756,22 @@
                                 reqWidth: 700,
                                 destroyOnClose: true,
                                 items: [
-                                    ['title', '           ', '->', {
+                                    ['title', 'О программе', '->', {
                                         DStype: 'window-button-close'
-                                    }], '<div style="padding: 10px">', '                                                                                           .       : ' + window.__noCacheNumber + '<br/>      :<ul><li>                  <b>                        </b></li><li>                                 <b>                           </b> (                     2018     )</li><li>         <b>                         </b> (                     2018     )</li></ul>', '</div>'
+                                    }], '<div style="padding: 10px">', 'Программа разработана на кафедре вычислительной техники института информационных технологий. Версия: ' + window.__noCacheNumber + '<br/>Авторы:<ul><li>Доцент кафедры ВТ <b>Путуридзе Зураб Шотаевич</b></li><li>Старший преподаватель кафедры ВТ <b>Данилович Евгений Сергеевич</b> (выпускник кафедры ВТ 2018 года)</li><li>Аспирант <b>Кривошея Михаил Сергеевич</b> (выпускник кафедры ВТ 2018 года)</li></ul>', '</div>'
                                 ]
                             }).open();
                         }
                     }
                 }]
-            }).attach(DS.page.topMenu.addButton('       '), 'click');
+            }).attach(DS.page.topMenu.addButton('Справка'), 'click');
             DS.create({
                 DStype: 'topmenu',
                 items: [{
-                    text: '                          Trivia',
+                    text: 'Удалить решения с сервера Trivia',
                     listeners: {
                         click: async function() {
-                            DS.confirm('                       <br/>                   ?<br/>                       !', async function() {
+                            DS.confirm('Вы действительно хотите<br/>удалить все решения?<br/>Это действие необратимо!', async function() {
                                 if (_listTasks.length != 0) {
                                     let allID = [];
                                     for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
@@ -787,27 +787,27 @@
                                         if (response_.ok) {
                                             let text = await response_.text();
                                             if (text == 'OK') {
-                                                DS.msg('       ', 'green');
+                                                DS.msg('Успешно', 'green');
                                                 showGetLink = false;
                                                 showImportFromBank = false;
                                                 serverIsOnline();
                                             } else {
-                                                DS.msg('               ', 'red');
+                                                DS.msg('Ошибка удаления', 'red');
                                             }
                                         } else {
-                                            DS.msg('                         ', 'red');
+                                            DS.msg('Ошибка выполнения запроса', 'red');
                                         }
                                     } catch (err) {
-                                        DS.msg('                     Trivia Server', 'red');
+                                        DS.msg('Ошибка подключения к Trivia Server', 'red');
                                     }
                                 } else {
-                                    DS.msg('      ', 'red');
+                                    DS.msg('Ошибка', 'red');
                                 }
                             });
                         }
                     }
                 }, '-', {
-                    text: '                  ',
+                    text: 'Общий банк решений',
                     icon: {
                         DStype: 'checkbox',
                         id: 'solutionsCheckbox',
@@ -851,7 +851,7 @@
                         DS.page.loadScripts(_currentModule.getScripts(), function() {
                             _currentModule.initialize(wrapper, args);
                         }, function(name) {
-                            DS.msg('                                       :<br/>' + name, 'red');
+                            DS.msg('Не удалось загрузить зависимость модуля:<br/>' + name, 'red');
                         });
                     } catch (e) {
                         _currentModule = null;
@@ -1004,7 +1004,7 @@
                         DS.screenBlock(0);
                     }
                 },
-                items: ['<div style="font-size: 2em; padding: 20px;">                 <span id="disconnect_timer"></span></div>']
+                items: ['<div style="font-size: 2em; padding: 20px;">Отключение через <span id="disconnect_timer"></span></div>']
             });
             var _disconnectTimeout = null;
             var _disconnectTime = 0;
@@ -1035,11 +1035,11 @@
         });
         //##########################################################################
         DS.addEvent(DS, 'ws/connected', function() {
-            DS.msg('                      ', 'green');
+            DS.msg('Соединение установлено', 'green');
             DS.q('.online-status')[0].classList.remove('-offline');
         });
         DS.addEvent(DS, 'ws/disconnected', function() {
-            DS.msg('                    ', 'red');
+            DS.msg('Соединение разорвано', 'red');
             DS.q('.online-status')[0].classList.add('-offline');
         });
         var LogWindow = function(text, title) {
@@ -1071,11 +1071,11 @@
                 DS.msg(strs, 'red');
                 return;
             }
-            LogWindow(err, '      ');
+            LogWindow(err, 'Ошибка');
         });
         DS.addEvent(DS, 'arm/info', function(err) {
             var strs = err.split('\n');
-            LogWindow(err, '      ');
+            LogWindow(err, 'Журнал');
         });
         //##########################################################################
         var _styles = {};
@@ -1100,7 +1100,7 @@
             switch (topic) {
                 case 'header-guards':
                     title = 'Header guards';
-                    text = '<p><b>Header guards</b>                                    ,                              :</p>' + '<pre class="code brush:cpp">#ifndef __SOME_UNIQUE_NAME_HERE\n' + '#define __SOME_UNIQUE_NAME_HERE\n' + '\n' + '//                     \n' + '\n' + '#endif\n' + '\n' + '</pre>' + '<p>                                      ,          ,                              ,                                     __SOME_UNIQUE_NAME_HERE.                                          ,    __SOME_UNIQUE_NAME_HERE                    .              ,               __SOME_UNIQUE_NAME_HERE (                    #define)                                                 .                                                    ,    __SOME_UNIQUE_NAME_HERE                 .               ,                                                        ,                                     .</p>' + '<p>                                         header guards. __SOME_UNIQUE_NAME_HERE                                 ,   ,            ,                                                                             _H.         ,         math.h                     __MATH_H</p>';
+                    text = '<p><b>Header guards</b> — это директивы условной компиляции, которые состоят из следующего:</p>' + '<pre class="code brush:cpp">#ifndef __SOME_UNIQUE_NAME_HERE\n' + '#define __SOME_UNIQUE_NAME_HERE\n' + '\n' + '// основная часть кода \n' + '\n' + '#endif\n' + '\n' + '</pre>' + '<p>Если подключить этот заголовочный файл, то первое, что он сделает — это проверит, был ли ранее определён идентификатор __SOME_UNIQUE_NAME_HERE. Если мы впервые подключаем этот заголовок, то __SOME_UNIQUE_NAME_HERE еще не был определён. Следовательно, мы определяем __SOME_UNIQUE_NAME_HERE (с помощью директивы #define) и выполняется основная часть заголовочного файла. Если же мы раньше подключали этот заголовочный файл, то __SOME_UNIQUE_NAME_HERE уже был определён. В таком случае, при подключении этого заголовочного файла во второй раз, его содержимое будет проигнорировано.</p>' + '<p>Все ваши заголовочные файлы должны иметь header guards. __SOME_UNIQUE_NAME_HERE может быть любым идентификатором, но, как правило, в качестве идентификатора используется имя заголовочного файла с окончанием _H. Например, в файле math.h идентификатор будет __MATH_H</p>';
                     break;
                 default:
                     console.error("Unknown help topic: " + topic);
@@ -1128,7 +1128,7 @@
                         // ,height: parseInt(document.documentElement.clientHeight * 0.8)+'px'
                         ,
                     items: [
-                        ['title', title || '    ', '->', {
+                        ['title', title || 'Файл', '->', {
                             DStype: 'window-button-close'
                         }], '<iframe width="' + parseInt(document.documentElement.clientWidth * 0.8) + '" height="' + parseInt(document.documentElement.clientHeight * 0.8) + '" src="js/pdf.js/web/viewer.html?file=' + url + '"></iframe>'
                     ]
@@ -1151,7 +1151,7 @@
                             ], '<div class="ds-window-scrollable">' //style="border: 1px solid grey;" 
                             , row.content, {
                                 DStype: 'button',
-                                label: '       ',
+                                label: 'Принять',
                                 displaystyle: 'block',
                                 listeners: {
                                     click: function() {
@@ -1223,114 +1223,120 @@
                 showGetLink = false;
             } 
             
-            if (!(localStorage.getItem('SEND_TO_SERVER' + ArmUserId.toString()) == 'true')) {
-                for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
-                    showImportFromBank = false;
-                    var task_ = _listTasks[i_];
-                    btn = document.getElementById('import_from_bank' + task_.id);
-                    if (btn) btn.style.display = 'none';
-                    tmp = document.getElementById('empty2' + task_.id);
-                    if (tmp) tmp.style.display = 'none';
-                }
-            }
-            try {
-                let controller = new AbortController();
-                setTimeout(() => controller.abort(), 4000);
-                await fetch('https://trivia1.ru/ping', {
-                    signal: controller.signal
-                });
-            } catch {
-                for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
-                    var task_ = _listTasks[i_];
-                    btn = document.getElementById('download_link' + task_.id);
-                    if (btn) btn.style.display = 'none';
-                    tmp = document.getElementById('empty1' + task_.id);
-                    if (tmp) tmp.style.display = 'none';
-                    btn = document.getElementById('import_from_bank' + task_.id);
-                    if (btn) btn.style.display = 'none';
-                    tmp = document.getElementById('empty2' + task_.id);
-                    if (tmp) tmp.style.display = 'none';
-                }
-                showImportFromBank = false;
-                showGetLink = false;
-                if (messageConectionShowed != 2) {
-                    DS.msg('             Trivia Server         ', 'red');
-                    messageConectionShowed = 2;
-                }
-                return;
-            }
-            if (messageConectionShowed != 1) {
-                DS.msg('             Trivia Server            ', 'green');
-                messageConectionShowed = 1;
-            }
-            
-            var tasksID = {}
-            for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
-                var task_ = _listTasks[i_];
-                tasksID[String(i_)] = task_.id;
-            }
-            
-            if (!showGetLink && _listTasks.length > 0) {
-                var request = 'https://trivia1.ru/get_all_download_links?';
-                for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {    
-                    var task_ = _listTasks[i_];
-                    if (i_ != 0){
-                        request += '&';
+            if(ArmUserId)
+            {
+                if (!(localStorage.getItem('SEND_TO_SERVER' + ArmUserId.toString()) == 'true')) {
+                    for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
+                        showImportFromBank = false;
+                        var task_ = _listTasks[i_];
+                        btn = document.getElementById('import_from_bank' + task_.id);
+                        if (btn) btn.style.display = 'none';
+                        tmp = document.getElementById('empty2' + task_.id);
+                        if (tmp) tmp.style.display = 'none';
                     }
-                    request += task_.name + '=' + task_.id;
                 }
-                
-                var responseLinks = await fetch(request)
-                if (responseLinks.ok) {
-                    json = await responseLinks.json()
-                    Object.keys(json).forEach(key => {
-                        btn = document.getElementById('download_link' + key);
-                        if (btn) {
-                            btn.style.display = 'block';
-                            DS.addEvent(btn, 'click', (function() {
-                                return (function(e) {
-                                    const textarea = document.createElement("textarea");
-                                    textarea.value = json[key];
-                                    document.body.appendChild(textarea);
-                                    textarea.select();
-                                    document.execCommand("copy");
-                                    document.body.removeChild(textarea);
-                                    DS.msg('                  ', 'green');
-                                    e.stopPropagation();
-                                });
-                            })());
-                        }
+                try {
+                    let controller = new AbortController();
+                    setTimeout(() => controller.abort(), 4000);
+                    await fetch('https://trivia1.ru/ping', {
+                        signal: controller.signal
                     });
+                } catch {
+                    for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
+                        var task_ = _listTasks[i_];
+                        btn = document.getElementById('download_link' + task_.id);
+                        if (btn) btn.style.display = 'none';
+                        tmp = document.getElementById('empty1' + task_.id);
+                        if (tmp) tmp.style.display = 'none';
+                        btn = document.getElementById('import_from_bank' + task_.id);
+                        if (btn) btn.style.display = 'none';
+                        tmp = document.getElementById('empty2' + task_.id);
+                        if (tmp) tmp.style.display = 'none';
+                    }
+                    showImportFromBank = false;
+                    showGetLink = false;
+                    if (messageConectionShowed != 2) {
+                        DS.msg('Соединение с Trivia Server потеряно', 'red');
+                        messageConectionShowed = 2;
+                    }
+                    return;
                 }
-                showGetLink = true;
-            }
-            if ((!showImportFromBank || (localStorage.getItem('SEND_TO_SERVER' + ArmUserId.toString()) == 'true') != lastSendToServerLocalStorage) && _listTasks.length > 0) {
-                lastSendToServerLocalStorage = (localStorage.getItem('SEND_TO_SERVER' + ArmUserId.toString()) == 'true');
+                if (messageConectionShowed != 1) {
+                    DS.msg('Соединение с Trivia Server установлено', 'green');
+                    messageConectionShowed = 1;
+                }
                 
-                
-                var request = 'https://trivia1.ru/check_all_solutions?';
-                for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {    
+                var tasksID = {}
+                for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {
                     var task_ = _listTasks[i_];
-                    if (i_ != 0){
-                        request += '&';
-                    }
-                    request += String(i_) + '=' + encodeURI(task_.name);
-                    tmp = document.getElementById('empty1' + task_.id);
-                    if (tmp) tmp.style.display = 'block';
+                    tasksID[String(i_)] = task_.id;
                 }
                 
-                var responseHasSolututions = await fetch(request);
-                if (responseHasSolututions.ok) {
-                    let json = await responseHasSolututions.json()
-                    for(var i_ = 0, l_ = json.length; i_ < l_; ++i_) {
-                        let _task_id = tasksID[json[i_]];
-                        btn = document.getElementById('import_from_bank' + _task_id);
-                        if (btn) btn.style.display = 'block';
-                        tmp = document.getElementById('empty2' + _task_id);
-                        if (tmp) tmp.style.display = 'block';
+                if (!showGetLink && _listTasks.length > 0) {
+                    var request = 'https://trivia1.ru/get_all_download_links?';
+                    for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {    
+                        var task_ = _listTasks[i_];
+                        if (i_ != 0){
+                            request += '&';
+                        }
+                        request += task_.name + '=' + task_.id;
+                    }
+                    
+                    var responseLinks = await fetch(request)
+                    if (responseLinks.ok) {
+                        json = await responseLinks.json()
+                        Object.keys(json).forEach(key => {
+                            btn = document.getElementById('download_link' + key);
+                            if (btn) {
+                                btn.style.display = 'block';
+                                DS.addEvent(btn, 'click', (function() {
+                                    return (function(e) {
+                                        const textarea = document.createElement("textarea");
+                                        textarea.value = json[key];
+                                        document.body.appendChild(textarea);
+                                        textarea.select();
+                                        document.execCommand("copy");
+                                        document.body.removeChild(textarea);
+                                        DS.msg('Ссылка скопирована', 'green');
+                                        e.stopPropagation();
+                                    });
+                                })());
+                            }
+                            tmp = document.getElementById('empty1' + key);
+                            if (tmp) tmp.style.display = 'block';
+                        });
+                    }
+                    showGetLink = true;
+                }
+                if ((!showImportFromBank || (localStorage.getItem('SEND_TO_SERVER' + ArmUserId.toString()) == 'true') != lastSendToServerLocalStorage) && _listTasks.length > 0) {
+                    
+                    lastSendToServerLocalStorage = (localStorage.getItem('SEND_TO_SERVER' + ArmUserId.toString()) == 'true');
+                    if(lastSendToServerLocalStorage) {
+                        var request = 'https://trivia1.ru/check_all_solutions?';
+                        for (var i_ = 0, l_ = _listTasks.length; i_ < l_; ++i_) {    
+                            var task_ = _listTasks[i_];
+                            if (i_ != 0){
+                                request += '&';
+                            }
+                            request += String(i_) + '=' + encodeURI(task_.name);
+                            tmp = document.getElementById('empty2' + task_.id);
+                            if (tmp) tmp.style.display = 'block';
+                        }
+                        
+                        var responseHasSolututions = await fetch(request);
+                        if (responseHasSolututions.ok) {
+                            let json = await responseHasSolututions.json()
+                            for(var i_ = 0, l_ = json.length; i_ < l_; ++i_) {
+                                let _task_id = tasksID[json[i_]];
+                                btn = document.getElementById('import_from_bank' + _task_id);
+                                if (btn) btn.style.display = 'block';
+                                tmp = document.getElementById('empty2' + _task_id);
+                                if (tmp) tmp.style.display = 'block';
+                            }
+                        }
+                        showImportFromBank = true;
                     }
                 }
-                showImportFromBank = true;
             }
         };
         setInterval(function() {
