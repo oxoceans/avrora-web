@@ -16,7 +16,7 @@ DS.ready(function() {
         var elTaskProcessUnsaved = null;
         var btnCloseTask;
         var btnExportTask;
-        var _taskStatusNames = ['', '            ', '           ', '          ', '     ', '           (       )', '            (       )', '          '];
+        var _taskStatusNames = ['', 'Не выполнено', 'На проверке', 'Доработать', 'Сдано', 'Доработать (оценено)', 'На проверке (оценено)', 'У куратора'];
         var elPanelLeftBottom;
         var fnInitTaskTool;
         var fnFinishTools;
@@ -69,7 +69,7 @@ DS.ready(function() {
                 reqWidth: 400,
                 destroyOnClose: true,
                 items: [
-                    ['title', '                      ' + DS.util.htmlescape(name), '->', {
+                    ['title', 'Комментарий к заданию ' + DS.util.htmlescape(name), '->', {
                         DStype: 'window-button-close'
                     }], '<div style="padding: 10px">', /* DS.util.htmlescape( */ comment /* ) */ /* .replace(/\n/g, '<br/>') */ , '</div>'
                 ]
@@ -83,7 +83,7 @@ DS.ready(function() {
                         reqWidth: 600,
                         reqNative: true,
                         items: [
-                            ['title', '                   ' + DS.util.htmlescape(name), '->', {
+                            ['title', 'Введение к заданию ' + DS.util.htmlescape(name), '->', {
                                 DStype: 'window-button-close'
                             }], '<div style="padding: 10px">', /* DS.util.htmlescape( */ d.data.text /* ) */ /* .replace(/\n/g, '<br/>') */ , '</div>'
                         ]
@@ -100,7 +100,7 @@ DS.ready(function() {
                 cb && cb();
                 return;
             }
-            DS.progressWindow('          ...');
+            DS.progressWindow('Сохранение...');
             DS.page.topMenu.removeButton(btnExportTask);
             btnExportTask = null;
             DS.page.topMenu.removeButton(btnCloseTask);
@@ -122,7 +122,7 @@ DS.ready(function() {
             });
         };
         var showTask = function(idTask) {
-            DS.progressWindow('               ');
+            DS.progressWindow('Загрузка задачи');
             elTaskProcessUnsaved.style.display = 'none';
             DS.ARM.getTask(idTask, function(d) {
                 // DS.progressWindow();
@@ -131,7 +131,7 @@ DS.ready(function() {
                     _taskData = task;
                     var fn = function() {
                         elTaskProcessName.innerText = DS.page.getTaskField('name');
-                        elTaskProcessSubject.innerText = _listSubjects[DS.page.getTaskField('subject_id')] || ' / ';
+                        elTaskProcessSubject.innerText = _listSubjects[DS.page.getTaskField('subject_id')] || 'н/д';
                         elTaskProcessTeacher.innerText = DS.page.getTaskField('teacher_name') + ' ' + DS.page.getTaskField('teacher_patronymic') + ' ' + DS.page.getTaskField('teacher_surname').substr(0, 1) + '.';
                         var i = 0;
                         var loadNext = function() {
@@ -154,12 +154,12 @@ DS.ready(function() {
                         	fnInitTaskTool(task.tools[i].id);
                         } */
                         DS.css(elTaskScreen, 'display', '');
-                        btnCloseTask = DS.page.topMenu.addButton('              ');
+                        btnCloseTask = DS.page.topMenu.addButton('Закрыть задачу');
                         DS.css(btnCloseTask, 'float', 'right');
                         DS.addEvent(btnCloseTask, 'click', function() {
                             endTask();
                         });
-                        btnExportTask = DS.page.topMenu.addButton('       ');
+                        btnExportTask = DS.page.topMenu.addButton('Экспорт');
                         DS.css(btnExportTask, 'float', 'right');
                         DS.addEvent(btnExportTask, 'click', function() {
                             DS.ARM.getTaskFiles(idTask, function(d) {
@@ -189,9 +189,9 @@ DS.ready(function() {
                                 fn();
                                 return;
                             }
-                            str = '    <strong>' + (new Date(savedData.__lastSaved * 1000)).toLocaleFormat('%d.%m.%Y %H:%M') + '</strong>';
+                            str = ' за <strong>' + (new Date(savedData.__lastSaved * 1000)).toLocaleFormat('%d.%m.%Y %H:%M') + '</strong>';
                         }
-                        DS.confirm('                                                         .                                         ' + str + '?', function() {
+                        DS.confirm('Обнаружен факт некорректного завершения предыдущей работы. Желаете загрузить восстановленные данные' + str + '?', function() {
                             for (var i in savedData) {
                                 if (savedData[i] && ((i == 'algo_graph') ? (savedData[i].length > 261) : (savedData[i].length > 0)) && i != 'tools') {
                                     DS.page.setTaskField(i, savedData[i]);
@@ -213,7 +213,7 @@ DS.ready(function() {
                 if (d.success) {
                     var DOMURL = window.URL || window.webkitURL || window;
                     if (!d.data.report_pdf) {
-                        DS.msg('          ', 'red');
+                        DS.msg('Отчета нет', 'red');
                         return;
                     }
                     var pdf = new Blob([DS.base64.decode(d.data.report_pdf, true)], {
@@ -222,7 +222,7 @@ DS.ready(function() {
                     var reportUrl = DOMURL.createObjectURL(pdf);
                     // window.open('js/pdf.js/web/viewer.html?file='+reportUrl);
                     //
-                    DS.page.showPdf(reportUrl, '     ');
+                    DS.page.showPdf(reportUrl, 'Отчет');
                     //DS.create({
                     //	DStype: 'window'
                     //	,destroyOnClose: true
@@ -236,7 +236,7 @@ DS.ready(function() {
                     //	,items: [
                     //		[
                     //			'title'
-                    //			,'     '
+                    //			,'Отчет'
                     //			,'->'
                     //			,{
                     //				DStype: 'window-button-close'
@@ -364,7 +364,7 @@ DS.ready(function() {
                     div.appendChild(tmp);
                     btn = document.createElement('button');
                     btn.id = 'download_link' + task.id;
-                    btn.innerHTML = '                             ';
+                    btn.innerHTML = 'Скопировать ссылку на решение';
                     btn.className = '-comment';
                     btn.style.display = 'none';
                     tmp.appendChild(btn);
@@ -375,7 +375,7 @@ DS.ready(function() {
                     div.appendChild(tmp);
                     if (task.status == 1 || task.status == 3 || task.status == 5) {
                         var importFunction = function(text, idTask) {
-                            DS.progressWindow('                ');
+                            DS.progressWindow('Загрузка импорта');
                             let content = DS.JSON.decode(text);
                             let task_data = DS.JSON.encode(content.task);
                             let code_data = content.code;
@@ -386,7 +386,7 @@ DS.ready(function() {
                                     _taskData = task;
                                     let fn = function() {
                                         elTaskProcessName.innerText = DS.page.getTaskField('name');
-                                        elTaskProcessSubject.innerText = _listSubjects[DS.page.getTaskField('subject_id')] || ' / ';
+                                        elTaskProcessSubject.innerText = _listSubjects[DS.page.getTaskField('subject_id')] || 'н/д';
                                         elTaskProcessTeacher.innerText = DS.page.getTaskField('teacher_name') + ' ' + DS.page.getTaskField('teacher_patronymic') + ' ' + DS.page.getTaskField('teacher_surname').substr(0, 1) + '.';
                                         let i = 0;
                                         let loadNext = function() {
@@ -401,12 +401,12 @@ DS.ready(function() {
                                         };
                                         loadNext();
                                         DS.css(elTaskScreen, 'display', '');
-                                        btnCloseTask = DS.page.topMenu.addButton('              ');
+                                        btnCloseTask = DS.page.topMenu.addButton('Закрыть задачу');
                                         DS.css(btnCloseTask, 'float', 'right');
                                         DS.addEvent(btnCloseTask, 'click', function() {
                                             endTask();
                                         });
-                                        btnExportTask = DS.page.topMenu.addButton('       ');
+                                        btnExportTask = DS.page.topMenu.addButton('Экспорт');
                                         DS.css(btnExportTask, 'float', 'right');
                                         DS.addEvent(btnExportTask, 'click', function() {
                                             DS.ARM.getTaskFiles(idTask, function(d) {
@@ -428,9 +428,9 @@ DS.ready(function() {
                                         DS.page.endTask = endTask;
                                         DS.ARM.saveTask(_taskData, function(d) {
                                             if (d.success) {
-                                                DS.msg('         ', 'green');
+                                                DS.msg('Сохранено', 'green');
                                             } else {
-                                                DS.msg('                 ', 'red');
+                                                DS.msg('Ошибка сохранения', 'red');
                                             }
                                         });
                                     };
@@ -455,7 +455,7 @@ DS.ready(function() {
                         tmp.className = 'task_item_buttons';
                         div.appendChild(tmp);
                         btn = document.createElement('button');
-                        btn.innerHTML = '                       ';
+                        btn.innerHTML = 'Импорт из банка решений';
                         btn.className = '-comment';
                         btn.id = 'import_from_bank' + task.id;
                         btn.style.display = 'none';
@@ -475,7 +475,7 @@ DS.ready(function() {
                                         items_.push('<td style="border: 1px solid #000; border-collapse: collapse;">');
                                         items_.push({
                                             DStype: 'button',
-                                            label: '      ',
+                                            label: 'Импорт',
                                             listeners: {
                                                 click: async function() {
                                                     let solutionName = solutions[_i].name;
@@ -498,9 +498,9 @@ DS.ready(function() {
                                         reqWidth: 850,
                                         height: '300px',
                                         items: [
-                                            ['title', '                  ', '->', {
+                                            ['title', 'Общий банк решений', '->', {
                                                 DStype: 'window-button-close'
-                                            }], '<div class="ds-window-scrollable" width="100%">', '<table style={border: 1px solid #000} width="99%" align="left">', '<tr>', '<th style="border: 1px solid #000; border-collapse: collapse;"> </th><th style="border: 1px solid #000; border-collapse: collapse;">Name</th><th style="border: 1px solid #000; border-collapse: collapse;">Size</th><th style="border: 1px solid #000; border-collapse: collapse;"></th>', '</tr>'
+                                            }], '<div class="ds-window-scrollable" width="100%">', '<table style={border: 1px solid #000} width="99%" align="left">', '<tr>', '<th style="border: 1px solid #000; border-collapse: collapse;">№</th><th style="border: 1px solid #000; border-collapse: collapse;">Name</th><th style="border: 1px solid #000; border-collapse: collapse;">Size</th><th style="border: 1px solid #000; border-collapse: collapse;"></th>', '</tr>'
                                         ].concat(items_).concat(['</div>'])
                                     }).open();
                                 }
@@ -515,7 +515,7 @@ DS.ready(function() {
                         tmp.className = 'task_item_buttons';
                         div.appendChild(tmp);
                         btn = document.createElement('button');
-                        btn.innerHTML = '               ';
+                        btn.innerHTML = 'Импорт из файла';
                         btn.className = '-comment';
                         tmp.appendChild(btn);
                         DS.addEvent(btn, 'click', (function(idTask) {
@@ -538,7 +538,7 @@ DS.ready(function() {
                     if (task.status == 4 || task.status == 5 || task.status == 6) {
                         tmp = document.createElement('div');
                         tmp.className = 'task_item_score';
-                        tmp.innerHTML = '      : ' + task.score;
+                        tmp.innerHTML = 'Оценка: ' + task.score;
                         div.appendChild(tmp);
                     }
                     tmp = document.createElement('div');
@@ -550,7 +550,7 @@ DS.ready(function() {
                         div.appendChild(tmp);
                         if (task.status == 3 || task.status == 5) {
                             var btn = document.createElement('button');
-                            btn.innerHTML = '           ';
+                            btn.innerHTML = 'Комментарий';
                             btn.className = '-comment';
                             tmp.appendChild(btn);
                             DS.addEvent(btn, 'click', (function(comment, name) {
@@ -561,7 +561,7 @@ DS.ready(function() {
                             })(task.comment, task.name));
                         } else {
                             var btn = document.createElement('button');
-                            btn.innerHTML = '      ';
+                            btn.innerHTML = 'Теория';
                             btn.className = '-theory';
                             tmp.appendChild(btn);
                             DS.addEvent(btn, 'click', (function(id, name) {
@@ -591,7 +591,7 @@ DS.ready(function() {
                     }
                     if (taskDelay >= limitErrors && task.status == 2 || task.status == 6) {
                         var tmp3 = document.createElement('div');
-                        tmp3.innerText = '                                      ';
+                        tmp3.innerText = 'Для проверки подойдите к преподавателю';
                         tmp3.className = '-notice';
                         tmp.appendChild(tmp3);
                     }
@@ -667,7 +667,7 @@ DS.ready(function() {
                         title.className = '-title';
                         div.appendChild(title);
                         var date = document.createElement('div');
-                        date.innerText = '            : ' + (new Date(row.date_add * 1000)).toLocaleFormat('%d.%m.%Y %H:%M');
+                        date.innerText = 'Опубликовано: ' + (new Date(row.date_add * 1000)).toLocaleFormat('%d.%m.%Y %H:%M');
                         date.className = '-date';
                         div.appendChild(date);
                         var content = document.createElement('div');
@@ -688,11 +688,11 @@ DS.ready(function() {
             elMainScreen.appendChild(elPanelLeft);
             var elPanelLeftTop = document.createElement('div');
             elPanelLeftTop.className = 'task_mod_left_top';
-            elPanelLeftTop.innerHTML = '           ';
+            elPanelLeftTop.innerHTML = 'Мои задания';
             elPanelLeft.appendChild(elPanelLeftTop);
             var elPanelLeftTabs = document.createElement('div');
             elPanelLeftTabs.className = 'task_mod_left_tabs';
-            // elPanelLeftTabs.innerHTML = '<div class="active">          </div><div>            </div><div>        </div><div>        </div><div>        </div>';
+            // elPanelLeftTabs.innerHTML = '<div class="active">Упражнения</div><div>Лабораторные</div><div>Домашние</div><div>Курсовые</div><div>Практика</div>';
             elPanelLeft.appendChild(elPanelLeftTabs);
             elPanelLeftBottom = document.createElement('div');
             elPanelLeftBottom.className = 'task_mod_left_bottom';
@@ -754,7 +754,7 @@ DS.ready(function() {
                                         };
                                         script.onerror = (function(name) {
                                             return (function() {
-                                                DS.msg('                               : ' + name, 'red');
+                                                DS.msg('Не удалось загрузить инструмент: ' + name, 'red');
                                                 if (--_sCount == 0) {
                                                     DS.progressWindow();
                                                     loadTasks();
@@ -789,7 +789,7 @@ DS.ready(function() {
             msg.className = '-text';
             var title = document.createElement('div');
             title.className = '-title';
-            var titleText = (new Date(time * 1000)).toLocaleFormat('%d.%m   %H:%M ');
+            var titleText = (new Date(time * 1000)).toLocaleFormat('%d.%m в %H:%M ');
             if (data.student_id > 0) {
                 msg.innerText = data.message_text;
                 titleText += data.student_name;
@@ -852,7 +852,7 @@ DS.ready(function() {
             div.appendChild(elChatText);
             elChatButton = document.createElement('button');
             elChatButton.disabled = !DS.page._currentTeacherId;
-            elChatButton.innerText = '         ';
+            elChatButton.innerText = 'Отправить';
             div.appendChild(elChatButton);
             DS.addEvent(elChatButton, 'click', function() {
                 if (elChatText.value.trim() && !elChatText.disabled) {
@@ -882,26 +882,26 @@ DS.ready(function() {
             elTaskScreen.appendChild(div);
             elTaskProcessName = document.createElement('div');
             elTaskProcessName.className = '-name';
-            elTaskProcessName.innerHTML = '        1_2_2';
+            elTaskProcessName.innerHTML = 'Задание 1_2_2';
             div.appendChild(elTaskProcessName);
             elTaskProcessSubject = document.createElement('div');
             elTaskProcessSubject.className = '-subject';
-            elTaskProcessSubject.innerHTML = '                            ';
+            elTaskProcessSubject.innerHTML = 'Процедурное программирование';
             div.appendChild(elTaskProcessSubject);
             elTaskProcessTeacher = document.createElement('div');
             elTaskProcessTeacher.className = '-teacher';
-            elTaskProcessTeacher.innerHTML = '                   .';
+            elTaskProcessTeacher.innerHTML = 'Оксана Николаевна Р.';
             div.appendChild(elTaskProcessTeacher);
             elTaskProcessUnsaved = document.createElement('div');
             elTaskProcessUnsaved.className = '-unsaved';
-            elTaskProcessUnsaved.innerHTML = '                               .';
+            elTaskProcessUnsaved.innerHTML = 'Имеются несохраненные изменения.';
             elTaskProcessUnsaved.style.display = 'none';
             div.appendChild(elTaskProcessUnsaved);
             DS.addEvent(elTaskProcessUnsaved, 'click', function() {
                 elTaskProcessUnsaved.style.display = 'none';
                 DS.page.taskSave(function(d) {
                     if (d.success) {
-                        DS.msg('         ', 'green');
+                        DS.msg('Сохранено', 'green');
                     } else {
                         elTaskProcessUnsaved.style.display = '';
                     }
@@ -909,7 +909,7 @@ DS.ready(function() {
             });
             elTaskProcessLeft = document.createElement('div');
             elTaskProcessLeft.className = 'task_process_left';
-            // elTaskProcessLeft.innerHTML = '<div class="active">                 </div><div>     </div><div>        </div><div>    -     </div><div>             </div><div>     </div><div>     </div>';
+            // elTaskProcessLeft.innerHTML = '<div class="active">Постановка задачи</div><div>Метод</div><div>Алгоритм</div><div>Блок-схема</div><div>Код программы</div><div>Тесты</div><div>Отчет</div>';
             elTaskScreen.appendChild(elTaskProcessLeft);
             elTaskProcessRight = document.createElement('div');
             elTaskProcessRight.className = 'task_process_right';
@@ -1005,7 +1005,7 @@ DS.ready(function() {
                 }
                 onReady && onReady();
             }, function(name) {
-                DS.msg('                                            :<br/>' + name, 'red');
+                DS.msg('Не удалось загрузить зависимость инструмента:<br/>' + name, 'red');
             });
         };
         fnFinishTools = function(cb) {
@@ -1093,7 +1093,7 @@ DS.ready(function() {
             var idTask = data.data[0].student_task_id;
             for (var i = 0, l = _listTasks.length; i < l; ++i) {
                 if (_listTasks[i].id == idTask) {
-                    DS.msg('<div>        ' + DS.util.htmlescape(_listTasks[i].name) + '            ' + data.data[0].teacher_score + ' ' + DS.util.getNumEnding(data.data[0].teacher_score, ['    ', '     ', '      ']) + '</div><div>' + /* DS.util.htmlescape( */ /* DS.util.htmlescape( */ data.data[0].teacher_comment /* ) */ /* ) */ + '</div>', 'green');
+                    DS.msg('<div>Задание ' + DS.util.htmlescape(_listTasks[i].name) + ' оценено на ' + data.data[0].teacher_score + ' ' + DS.util.getNumEnding(data.data[0].teacher_score, ['балл', 'балла', 'баллов']) + '</div><div>' + /* DS.util.htmlescape( */ /* DS.util.htmlescape( */ data.data[0].teacher_comment /* ) */ /* ) */ + '</div>', 'green');
                     break;
                 }
             }
@@ -1103,7 +1103,7 @@ DS.ready(function() {
             var idTask = data.data[0].student_task_id;
             for (var i = 0, l = _listTasks.length; i < l; ++i) {
                 if (_listTasks[i].id == idTask) {
-                    DS.msg('<div>        ' + DS.util.htmlescape(_listTasks[i].name) + '                        </div><div>' + /* DS.util.htmlescape(DS.util.htmlescape( */ data.data[0].teacher_comment /* )) */ + '</div>', 'red');
+                    DS.msg('<div>Задание ' + DS.util.htmlescape(_listTasks[i].name) + ' возвращено на доработку</div><div>' + /* DS.util.htmlescape(DS.util.htmlescape( */ data.data[0].teacher_comment /* )) */ + '</div>', 'red');
                     break;
                 }
             }
@@ -1129,7 +1129,7 @@ DS.ready(function() {
                     }
                     if (!isFound) {
                         endTask(function() {
-                            DS.msg('                                            ');
+                            DS.msg('Задание было закрыто в связи с началом урока');
                         });
                     }
                 }
@@ -1211,7 +1211,7 @@ DS.ready(function() {
                         player.style.right = 0;
                         player.style.bottom = 0;
                         w.document.body.appendChild(player);
-                        w.document.title = '                   ';
+                        w.document.title = 'Демонстрация экрана';
                         player.w = w;
                         // player = DS.gid('player_screencast');
                     } else {
@@ -1331,7 +1331,7 @@ DS.ready(function() {
             console.warn("Module init!");
             elWrapper = element;
             _isInitialized = false;
-            DS.progressWindow('               ');
+            DS.progressWindow('Загрузка данных');
             initMainScreen();
             initTaskScreen();
             DS.ARM.getCurrentTeacherId(function(d) {
@@ -1378,14 +1378,14 @@ DS.ready(function() {
                             var wnd;
                             items.push({
                                 DStype: 'button',
-                                label: '           ',
+                                label: 'Подтвердить',
                                 listeners: {
                                     click: function() {
                                         var data = this.getForm().getFields();
                                         if (!data.task_id) {
                                             return;
                                         }
-                                        DS.confirm('                         "' + names[data.task_id] + '"?                             ', function() {
+                                        DS.confirm('Подтверждаете выбор темы "' + names[data.task_id] + '"? Это действие нельзя отменить', function() {
                                             DS.ARM.selectCourseWork(idCourse, data.task_id, function(d) {
                                                 if (d.success) {
                                                     wnd.close();
@@ -1401,7 +1401,7 @@ DS.ready(function() {
                                 reqWidth: 600,
                                 destroyOnClose: true,
                                 items: [
-                                    ['title', '                          ', '->', {
+                                    ['title', 'Выбор темы курсовой работы', '->', {
                                         DStype: 'window-button-close'
                                     }], {
                                         DStype: 'form-panel',
