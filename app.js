@@ -3,7 +3,7 @@
 */
 (function(console_log){
 DS.ready(function(){
-    DS.msg("app.js изменен")
+	DS.msg("app.js изменен. Вставка не включена")
 	var ArmUserId = DS.util.urlParam('ArmUserId') || localStorage.student_id;
 	var ArmUserPassword = DS.util.urlParam('ArmUserPassword') || localStorage.password;
 	
@@ -31,7 +31,7 @@ DS.ready(function(){
 		if(!txt){
 			return('');
 		}
-		return(txt.replace(/\r/g, '').replace(/ /g, ' '));
+		return(txt.replace(/\r/g, '').replace(/ /g, ' '));
 		// return(txt.replace(/<[^>]+>/g, '').replace(/[^a-zA-Zа-яА-Я0-9]/g, ''));
 		// return(txt);
 	};
@@ -56,7 +56,56 @@ DS.ready(function(){
 			// console.log('bufHTML='+_cpBufferHtml);
 		}
 		,canPaste: function(txt, isHTML){
-		    return true;
+			console.error('canPaste()');
+			console.error(txt);
+			console.error(isHTML);
+			if(!txt){
+				return(false);
+			}
+			
+			var txt2 = null;
+			
+			/* if(isHTML == 'mce'){
+				
+			}
+			else  */if(isHTML){
+				var pasteBegin = '<!--StartFragment-->';
+				var pasteEnd = '<!--EndFragment-->';
+				txt2 = txt.replace(pasteBegin, '').replace(pasteEnd, '');
+				
+				txt = txt.split(pasteBegin);
+				if(txt.length > 1){
+					txt.shift();
+					// return(false);
+				}
+				txt = txt.join(pasteBegin);
+				
+				txt = txt.split(pasteEnd);
+				if(txt.length > 1){
+					txt.pop();
+					// return(false);
+				}
+				txt = txt.join(pasteEnd);
+			}
+			
+			txt = _cbClear(txt);
+			// window.txt = window.txt || [];
+			// window.txt.push([txt, _cpBuffer]);
+			console.warn(txt+'='+_cpBuffer, txt == _cpBuffer);
+			console.warn(txt+'='+_cpBufferHtml, txt == _cpBufferHtml);
+			
+			if(isHTML)
+			{
+				return(txt === _cpBuffer || txt.replace(/[\r\n\s]/g, '') === _cpBuffer.replace(/[\r\n\s]/g, '')
+				 || (_cpBufferHtml != '' && (txt === _cpBufferHtml || txt.replace(/[\r\n\s]/g, '') === _cpBufferHtml.replace(/[\r\n\s]/g, '')
+				 || txt2 === _cpBufferHtml))
+				 || (_cpBufferCleared != '' && (_cbDropHtml(txt) === _cpBufferCleared
+				 || _cbDropHtml(txt).replace(/[\r\n\s]/g, '') === _cpBufferCleared.replace(/[\r\n\s]/g, '')
+				 || _cbDropHtml(txt2) === _cpBufferCleared))
+				);
+			}
+						
+			return(txt === _cpBuffer || txt.replace(/[\r\n\s]/g, '') === _cpBuffer.replace(/[\r\n\s]/g, ''));
 		}
 	};
 	
@@ -1160,30 +1209,8 @@ DS.ready(function(){
 	window.UpdateNews = UpdateNews;
 	
 	var listKeyEvents = [];
-// 	DS.addEvent(window, 'keydown keyup', function(e){
-// 		var el = [
-// 			performance.now()
-// 			,e.type
-// 			,e.which
-// 			,e.shiftKey
-// 			,e.metaKey
-// 			,e.altKey
-// 			,e.keyCode
-// 			,e.key
-// 			,e.code
-// 			,e.ctrlKey
-// 			,e.charCode
-// 		];
-// 		listKeyEvents.push(el);
-// 	});
 	
 	var isAuthorized = false;
-	setInterval(function(){
-		if(listKeyEvents.length && isAuthorized){
-			DS.ARM.sendKBE({start: performance.timeOrigin, list: listKeyEvents});
-			listKeyEvents = [];
-		}
-	}, 1000);
 	
 	DS.addEvent(DS, 'arm/authorized', function(d){
 		isAuthorized = true;
@@ -1202,7 +1229,7 @@ DS.ready(function(){
 			_newsUpdateInterval = null;
 		}
 	});
-	
+
 	
 });
 })(console.log.bind(console));
