@@ -1,5 +1,5 @@
 DS.ready(function(){
-    DS.msg("Методы ARM переопределены", "green")
+    DS.msg("Методы ARM переопределены")
 	// var ArmUserId = DS.util.urlParam('ArmUserId');
 	// ARMconfig.isDebugMode = ArmUserId == '' || DS.util.urlParam('isDebug');
 	// ARMconfig.userId = ArmUserId || 10;
@@ -60,11 +60,12 @@ DS.ready(function(){
 		DS.armCmd('getStudentArmVersion', {}, cb);
 	};
 	
-	var _clgGen = 0;
+	var _clgGen = -1;
 	DS.ARM.authorize = function(idUser, password, cb){
 		DS.armCmd('newChallenge', {}, function(d){
 			if(d.success){
-
+				++_clgGen;
+				
 				var fn = function(h){
 					DS.armCmd('authorize', {
 						user_id: idUser
@@ -102,30 +103,30 @@ DS.ready(function(){
 						clearTimeout(t);
 					}
 				}
-				else{
+				else {
                     data = {
-                      userId: idUser,
-                      hash: hash
+                        userId: idUser,
+                        hash: hash
                     };
-                    
+
                     fetch("http://localhost:8080/bridge", {
-                      method: "POST",
-                      body: JSON.stringify(data)
-                    })
-                      .then(response => {
-                        return response.json();
-                      })
-                      .then(data => {
-                        if (data.error) {
-                            DS.msg(`[ARM_Bridge] Не удалось авторизоваться. ${data.error}`, 'red')
-                        } else {
-                            fn(data.key);
-                        }
-                      })
-                      .catch(error => {
-                          DS.msg(`[ARM_Bridge] ${error}`, 'red')
-                      })
-				}
+                            method: "POST",
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => {
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.error) {
+                                DS.msg(`[ARM_Bridge] Не удалось авторизоваться. ${data.error}`, 'red')
+                            } else {
+                                fn(data.key);
+                            }
+                        })
+                        .catch(error => {
+                            DS.msg(`[ARM_Bridge] ${error}`, 'red')
+                        })
+                }
 				return;
 			}
 			
